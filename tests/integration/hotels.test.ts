@@ -53,22 +53,22 @@ describe("GET /hotels", () => {
   });
 
   describe("when token is valid", () => {
-    it(`should respond with status 404 when doesn't has enrollment`, async () => {
+    it("should respond with status 404 when doesn't has enrollment", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
       expect(response.status).toBe(httpStatus.NOT_FOUND);
     });
 
-    it(`should respond with status 404 when doesn't has ticket`, async () => {
+    it("should respond with status 404 when doesn't has ticket", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
-      const enrollment = await createEnrollmentWithAddress(user);
+      await createEnrollmentWithAddress(user);
       const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
       expect(response.status).toBe(httpStatus.NOT_FOUND);
     });
 
-    it(`should respond with status 404 when doesn't has hotel`, async () => {
+    it("should respond with status 404 when doesn't has hotel", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
@@ -78,7 +78,7 @@ describe("GET /hotels", () => {
       expect(response.status).toBe(httpStatus.NOT_FOUND);
     });
 
-    it(`should respond with status 402 when ticket is not paid`, async () => {
+    it("should respond with status 402 when ticket is not paid", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
@@ -89,7 +89,7 @@ describe("GET /hotels", () => {
       expect(response.status).toBe(httpStatus.PAYMENT_REQUIRED);
     });
 
-    it(`should respond with status 402 when ticket is remote`, async () => {
+    it("should respond with status 402 when ticket is remote", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
@@ -100,7 +100,7 @@ describe("GET /hotels", () => {
       expect(response.status).toBe(httpStatus.PAYMENT_REQUIRED);
     });
 
-    it(`should respond with status 402 when ticket is doens't includes hotel`, async () => {
+    it("should respond with status 402 when ticket is doens't includes hotel", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
@@ -111,7 +111,7 @@ describe("GET /hotels", () => {
       expect(response.status).toBe(httpStatus.PAYMENT_REQUIRED);
     });
 
-    it(`should respond with status 200 and send an array with all hotels`, async () => {
+    it("should respond with status 200 and send an array with all hotels", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
@@ -160,22 +160,22 @@ describe("GET /hotels/:id", () => {
   });
 
   describe("when token is valid", () => {
-    it(`should respond with status 404 when doesn't has enrollment`, async () => {
+    it("should respond with status 404 when doesn't has enrollment", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const response = await server.get("/hotels/0").set("Authorization", `Bearer ${token}`);
       expect(response.status).toBe(httpStatus.NOT_FOUND);
     });
 
-    it(`should respond with status 404 when doesn't has ticket`, async () => {
+    it("should respond with status 404 when doesn't has ticket", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
-      const enrollment = await createEnrollmentWithAddress(user);
+      await createEnrollmentWithAddress(user);
       const response = await server.get("/hotels/0").set("Authorization", `Bearer ${token}`);
       expect(response.status).toBe(httpStatus.NOT_FOUND);
     });
 
-    it(`should respond with status 404 when doesn't has hotel`, async () => {
+    it("should respond with status 404 when doesn't has hotel", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
@@ -185,7 +185,7 @@ describe("GET /hotels/:id", () => {
       expect(response.status).toBe(httpStatus.NOT_FOUND);
     });
 
-    it(`should respond with status 402 when ticket is not paid`, async () => {
+    it("should respond with status 402 when ticket is not paid", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
@@ -196,7 +196,7 @@ describe("GET /hotels/:id", () => {
       expect(response.status).toBe(httpStatus.PAYMENT_REQUIRED);
     });
 
-    it(`should respond with status 402 when ticket is remote`, async () => {
+    it("should respond with status 402 when ticket is remote", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
@@ -207,7 +207,7 @@ describe("GET /hotels/:id", () => {
       expect(response.status).toBe(httpStatus.PAYMENT_REQUIRED);
     });
 
-    it(`should respond with status 402 when ticket is doens't includes hotel`, async () => {
+    it("should respond with status 402 when ticket is doens't includes hotel", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
@@ -218,7 +218,7 @@ describe("GET /hotels/:id", () => {
       expect(response.status).toBe(httpStatus.PAYMENT_REQUIRED);
     });
 
-    it(`should respond with status 404 when hotel doesn't have room created`, async () => {
+    it("should respond with status 404 when hotel doesn't have room created", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
@@ -229,7 +229,7 @@ describe("GET /hotels/:id", () => {
       expect(response.status).toBe(httpStatus.NOT_FOUND);
     });
 
-    it(`should respond with status 200 and send an array with all hotels`, async () => {
+    it("should respond with status 200 and send an array with all hotels", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);

@@ -1,8 +1,8 @@
-import { ApplicationError } from '@/protocols';
+import { ApplicationError } from "@/protocols";
 
 export function paymentError(): ApplicationError {
   return {
-    name: 'PaymentError',
-    message: 'Payment is required.',
+    name: "PaymentError",
+    message: "Payment is required.",
   };
 }

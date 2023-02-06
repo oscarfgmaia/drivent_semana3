@@ -1,7 +1,7 @@
-import { notFoundError, paymentError, unauthorizedError } from '@/errors';
-import enrollmentRepository from '@/repositories/enrollment-repository';
-import hotelRepository from '@/repositories/hotel-repository';
-import ticketRepository from '@/repositories/ticket-repository';
+import { notFoundError, paymentError } from "@/errors";
+import enrollmentRepository from "@/repositories/enrollment-repository";
+import hotelRepository from "@/repositories/hotel-repository";
+import ticketRepository from "@/repositories/ticket-repository";
 
 async function getHotels(userId: number) {
   await validRegistration(userId);
@@ -19,7 +19,6 @@ async function getHotelById(hotelId: number, userId: number) {
   if (!hotel || hotel.Rooms.length === 0) {
     throw notFoundError();
   }
-
   return hotel;
 }
 
@@ -33,7 +32,7 @@ async function validRegistration(userId: number) {
     throw notFoundError();
   }
   if (
-    ticket.status === 'RESERVED' ||
+    ticket.status === "RESERVED" ||
     ticket.TicketType.isRemote === true ||
     ticket.TicketType.includesHotel === false
   ) {
