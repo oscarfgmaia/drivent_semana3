@@ -1,8 +1,8 @@
 import supertest from 'supertest';
 import httpStatus from 'http-status';
-import app, { init } from '@/app';
+import app, { init, close } from '@/app';
 import faker from '@faker-js/faker';
-import { createEnrollmentWithAddress, createUser, createTicketType, createTicket } from '../factories';
+import { createUser, createHotel, createRoom } from '../factories';
 import * as jwt from 'jsonwebtoken';
 import { cleanDb, generateValidToken } from '../helpers';
 
@@ -13,6 +13,11 @@ beforeAll(async () => {
 beforeEach(async () => {
   await cleanDb();
 });
+
+afterAll(async () => {
+  await close();
+});
+
 const server = supertest(app);
 
 describe('GET /hotels', () => {
@@ -42,10 +47,17 @@ describe('GET /hotels', () => {
   describe('when token is valid', () => {
     it('should respond with empty array when there are no hotels created', async () => {
       const token = await generateValidToken();
-
       const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
 
       expect(response.body).toEqual([]);
+    });
+
+    it('should respond with an array when there are hotels created', async () => {
+      const token = await generateValidToken();
+      await createHotel();
+      const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
+
+      expect(response.body).toHaveLength(1);
     });
   });
 });
