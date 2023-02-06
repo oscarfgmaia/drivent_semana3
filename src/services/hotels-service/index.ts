@@ -5,7 +5,7 @@ import ticketRepository from '@/repositories/ticket-repository';
 
 async function getHotels() {
   const hotels = await hotelRepository.getHotels();
-  if (!hotels) {
+  if (hotels.length===0) {
     throw notFoundError();
   } else {
     return hotels;
