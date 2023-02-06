@@ -5,6 +5,7 @@ import faker from '@faker-js/faker';
 import { createUser, createHotel, createRoom } from '../factories';
 import * as jwt from 'jsonwebtoken';
 import { cleanDb, generateValidToken } from '../helpers';
+import { prisma } from '@/config';
 
 beforeAll(async () => {
   await init();
@@ -12,6 +13,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await cleanDb();
+  await prisma.$queryRaw`ALTER SEQUENCE "Hotel_id_seq" RESTART WITH 1`;
 });
 
 afterAll(async () => {
@@ -45,19 +47,28 @@ describe('GET /hotels', () => {
   });
 
   describe('when token is valid', () => {
-    it('should respond with empty array when there are no hotels created', async () => {
+    it('should respond with status 404 when there are no hotels created', async () => {
       const token = await generateValidToken();
       const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
 
-      expect(response.body).toEqual([]);
+      expect(response.status).toEqual(httpStatus.NOT_FOUND);
     });
 
-    it('should respond with an array when there are hotels created', async () => {
+    it('should respond with status 200 and an array with existing data', async () => {
       const token = await generateValidToken();
       await createHotel();
+      await createHotel();
       const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
-      //TODO VALIDATE THIS RIGHT
-      expect(response.body).toHaveLength(1);
+      expect(response.body).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(Number),
+            name: expect.any(String),
+            image: expect.any(String),
+          }),
+        ]),
+      );
+      expect(response.status).toBe(httpStatus.OK);
     });
   });
 });
