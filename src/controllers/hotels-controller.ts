@@ -7,8 +7,14 @@ import httpStatus from 'http-status';
 export async function getHotels(req: AuthenticatedRequest, res: Response) {
   try {
     const hotels = await hotelService.getHotels();
-    res.send(hotels);
-  } catch (error) {}
+    res.send(hotels).status(200);
+  } catch (error) {
+    if (error.name === 'NotFoundError') {
+      return res.sendStatus(httpStatus.NOT_FOUND);
+    } else {
+      return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
 
 export async function getHotelById(req: AuthenticatedRequest, res: Response) {
@@ -18,14 +24,14 @@ export async function getHotelById(req: AuthenticatedRequest, res: Response) {
 
   try {
     const result = await hotelService.getHotelById(hotelId, userId);
-    return res.send(result);
+    return res.send(result).status(200);
   } catch (error) {
     if (error.name === 'NotFoundError') {
       return res.sendStatus(httpStatus.NOT_FOUND);
     } else if (error.name === 'PaymentError') {
       return res.sendStatus(httpStatus.PAYMENT_REQUIRED);
     } else {
-      return res.sendStatus(500);
+      return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }
