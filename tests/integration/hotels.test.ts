@@ -56,7 +56,7 @@ describe('GET /hotels', () => {
       const token = await generateValidToken();
       await createHotel();
       const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
-
+      //TODO VALIDATE THIS RIGHT
       expect(response.body).toHaveLength(1);
     });
   });
